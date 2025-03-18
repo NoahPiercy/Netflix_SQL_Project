@@ -114,6 +114,78 @@ WHERE
 	AND duration LIKE '%Seasons%'
 ```
 Objective: Identify TV shows with more than 5 seasons.
+### 9. Count the Number of COntent Items in Each Genre
+``` SQL
+WITH SplitGenres AS (
+    SELECT TRIM(value) AS listed_in
+    FROM PortfolioProject.dbo.NetflixTitles
+    CROSS APPLY STRING_SPLIT(listed_in, ',')
+)
+SELECT listed_in, COUNT(*) AS Total_Content
+FROM SplitGenres
+GROUP BY listed_in
+ORDER BY Total_Content DESC;
+```
+Objective: Count the number of content items in each genre.
+### 10. Find the Average Release Year for Content Produced in a Specific Country (United States)
+``` SQL
+SELECT AVG(release_year) AS Average_Release_Year
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE Country LIKE '%United States%'
+```
+Objective: Find the Average Release Year for Content in the United States
+### 11. List All Movies that are Documentaries
+``` SQL
+SELECT *
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE listed_in LIKE '%Documentaries%'
+```
+Objective: Retrieve all movies classified as documentaries.
+### 12. Find All Content Without a Director
+``` SQL
+SELECT *
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE Director IS NULL
+```
+Objective: List all content that does not have a director.
+### 13. Find all Movies/TV Shows that 'Ryan Reynolds' has Appeared in
+``` SQL
+SELECT * 
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE cast LIKE '%RYAN REYNOLDS%'
+```
+Objective: Find all content that 'Ryan Reynolds' has appeared in on Netflix.
+### 14. Find the Top 10 Actors Who Have Appeared in the Highest Number of Movies Produced in the United States
+``` SQL
+WITH SplitActors AS (
+    SELECT TRIM(value) AS cast
+    FROM PortfolioProject.dbo.NetflixTitles
+    CROSS APPLY STRING_SPLIT(cast, ',')
+	WHERE country LIKE '%United States%'
+)
+SELECT TOP 10 cast, COUNT(*) AS Total_Content
+FROM SplitActors
+GROUP BY cast
+ORDER BY Total_Content DESC;
+```
+Objective: Identify the top 10 actors with the most appearances in United States-produced movies.
+### 15. Categorize Content Based on the Presence of 'Kill' and 'Violence' Keywords
+``` SQL
+SELECT Show_ID, Type, Title, Rating, Description, Duration,
+CASE
+	WHEN Description LIKE '%Kill%' OR Description LIKE '%Violence%' Then 'Bad'
+	ELSE 'Good'
+END AS GoodVSBad
+FROM PortfolioProject.dbo.NetflixTitles
+```
+Objective: Categorize content as 'Bad' if it contains 'Kill' or 'Violence' in the description, and categorize content as 'Good' if it does not.
+
+## Author - Noah Piercy
+This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles, If you have any questions, or feedback, or would like to discuss more, feel free to get in touch!
+
+
+
+
 
 
 
