@@ -28,3 +28,27 @@ Create Table NetflixTitles
 	Listed_In VARCHAR (100),
 	Description VARCHAR (250)
 )
+```
+## Business Problems and Solutions
+### 1. Count the Number of Movies vs TV Shows
+``` SQL
+SELECT DISTINCT Type
+FROM PortfolioProject.dbo.NetflixTitles
+
+SELECT Count(Type) As MovieToTV, type
+FROM PortfolioProject.dbo.NetflixTitles
+GROUP BY (Type)
+```
+Objective: Determine the distribution of content types on Netflix.
+### 2. Find the Most Common Rating for Movies and TV Shows
+``` SQL
+SELECT Type, Rating
+FROM
+(
+SELECT Type, Rating, Count(*) As TotalRatings, Rank() Over (Partition By Type ORDER BY Count(*) DESC) As Ranking
+FROM PortfolioProject.dbo.NetflixTitles
+GROUP BY Type, Rating
+) AS Table1
+WHERE Ranking = 1
+```
+Objective: Identify the most frequently occurring rating for each type of content.
