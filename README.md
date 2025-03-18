@@ -52,3 +52,72 @@ GROUP BY Type, Rating
 WHERE Ranking = 1
 ```
 Objective: Identify the most frequently occurring rating for each type of content.
+### 3. List All Movies Released in a Specific Year (e.g., 2021)
+``` SQL
+SELECT *
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE Release_year = 2021 AND type = 'Movie'
+```
+Objective: Retrieve all movies released in a specific year.
+### 4. Find the Top 5 Countries with the Most Content on Netflix
+``` SQL
+WITH SplitCountries AS (
+    SELECT TRIM(value) AS Country
+    FROM PortfolioProject.dbo.NetflixTitles
+    CROSS APPLY STRING_SPLIT(Country, ',')
+)
+SELECT TOP 5 Country, COUNT(*) AS Total_Content
+FROM SplitCountries
+GROUP BY Country
+ORDER BY Total_Content DESC;
+```
+Objective: Identify the top 5 countries with the most content items.
+### 5. Identify the Longest Movie
+``` SQL
+SELECT TOP 1
+	Title,
+	Type,
+	CAST(REPLACE(duration,'min','') AS INT) AS DurationMins
+	FROM PortfolioProject.dbo.NetflixTitles
+	WHERE type = 'Movie' 
+	ORDER BY DurationMins DESC
+```
+Objective: Find the movie with the longest duration.
+### 6. Find Content Added in the Last 5 Years
+``` SQL
+SELECT * FROM PortfolioProject.dbo.NetflixTitles
+
+ALTER TABLE PortfolioProject.dbo.NetflixTitles
+ADD Date_Added_Converted Date;
+
+UPDATE PortfolioProject.dbo.NetflixTitles
+SET Date_Added_Converted = CONVERT(Date,date_added)
+
+SELECT Title, Type, Date_added_Converted
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE date_added_Converted >= DATEADD(YEAR, -5, GETDATE());
+```
+Objective: Retrieve content added to Netflix in the last 5 years.
+### 7. Find All Movies/TV Shows by Director 'Rajiv Chilaka'
+``` SQL
+SELECT *
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE Director LIKE '%Rajiv Chilaka%'
+```
+Objective: List all content directed by 'Rajiv Chilaka'.
+### 8. List All TV Shows with More than 5 Seasons
+``` SQL
+SELECT *
+FROM PortfolioProject.dbo.NetflixTitles
+WHERE
+	CAST(LEFT(duration, CHARINDEX(' ',duration) -1) AS INT) > 5
+	AND duration LIKE '%Seasons%'
+```
+Objective: Identify TV shows with more than 5 seasons.
+
+
+
+
+
+
+
