@@ -11,3 +11,20 @@ This project involves a comprehensive analysis of Netflix's movies and TV shows 
 ## Dataset
 The data for this project is sourced from the Kaggle dataset:
 - Dataset Link: [Netflix Dataset](https://www.kaggle.com/datasets/shivamb/netflix-shows?resource=download)
+## Schema
+''' SQL
+Create Table NetflixTitles
+(
+	Show_ID VARCHAR (6),
+	Type VARCHAR (10),
+	Title VARCHAR (150),
+	Director VARCHAR (208),
+	Casts VARCHAR (1000),
+	Country VARCHAR (150),
+	Date_Added VARCHAR (50),
+	Release_Year INT,
+	Rating VARCHAR (10),
+	Duration VARCHAR (15),
+	Listed_In VARCHAR (100),
+	Description VARCHAR (250)
+)
